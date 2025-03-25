@@ -67,6 +67,9 @@ const SearchComp = () => {
     }
   }, [searchParams]);
 
+  const selectedCity = cities.find((city) => city.id === selectedCityId);
+  const cityName = selectedCity ? selectedCity.name : "Pilih Kota";
+
   return (
     <div>
       {!changeSearch ? (
@@ -74,11 +77,11 @@ const SearchComp = () => {
           <div className="w-2/3 flex gap-5">
             <div className="w-1/3">
               <Label htmlFor="input">Kota/Nama Hotel/ Destinasi</Label>
-              <div className="font-bold text-xl">Jakarta</div>
+              <div className="font-bold text-xl">{cityName}</div>
             </div>
             <div className="w-1/3 border-l px-5 border-r">
               <Label htmlFor="input">Tanggal Menginap</Label>
-              <div className="font-bold text-xl">Jakarta</div>
+              <div className="font-bold text-xl">{selectedDated}</div>
             </div>
             <div className="w-1/3">
               <Label htmlFor="input">Jumlah Tamu dan Kamar</Label>

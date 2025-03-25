@@ -51,6 +51,16 @@ export default async function SearchResult({
 
   console.log("Final Hotels Data:", hotels); // Debugging
 
+ const queryParams = new URLSearchParams();
+ Object.entries(searchParams).forEach(([key, value]) => {
+   if (typeof value === "string") {
+     queryParams.append(key, value);
+   } else if (Array.isArray(value)) {
+     value.forEach((v) => queryParams.append(key, v));
+   }
+ });
+
+ const date = queryParams.get("date");
   return (
     <div className="px-[120px] py-[64px]">
       <SearchComp />
@@ -59,7 +69,7 @@ export default async function SearchResult({
           <LeftSideBar />
         </div>
         <div className=" rounded-xl w-2/3 ">
-          <SearchResultsMap hotels={hotels} />
+          <SearchResultsMap hotels={hotels} date={date ? date:""} />
         </div>
       </div>
     </div>

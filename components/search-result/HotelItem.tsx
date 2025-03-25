@@ -1,5 +1,6 @@
 import { MapPinCheck, Star } from 'lucide-react';
 import Image from 'next/image';
+import Link from 'next/link';
 import React from 'react'
 
 interface HotelItemProps{
@@ -10,10 +11,12 @@ interface HotelItemProps{
     price:number
     star:number
     address:string
+    id:number
+    date:string
 }
-const HotelItem:React.FC<HotelItemProps> = ({price,title, description, images, facility, star, address}) => {
+const HotelItem:React.FC<HotelItemProps> = ({price,title, description, images, facility, star, address,id, date}) => {
   return (
-    <div className="flex shadow-md hover:shadow-xl duration-300 border  rounded-2xl">
+    <Link href={`/detail-hotel?id=${id}&date=${date}`} className="flex shadow-md hover:shadow-xl duration-300 border  rounded-2xl">
       <div className="w-[300px]   overflow-hiden">
         <Image
           width={1000}
@@ -51,7 +54,7 @@ const HotelItem:React.FC<HotelItemProps> = ({price,title, description, images, f
 
         <div className="w-full text-end font-bold text-blue-500">Rp {price}</div>
       </div>
-    </div>
+    </Link>
   );
 }
 
