@@ -44,3 +44,10 @@ export interface Room {
   price: number;
   size: number;
 }
+
+
+export interface CityResponse {
+  data: City[];
+  statusCode: number;
+  success: boolean;
+}

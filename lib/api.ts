@@ -1,7 +1,19 @@
 export async function getListKota() {
-  const response = await fetch(`https://ota-gin.onrender.com/api/v1/cities`);
-  const data = await response.json();
-  return data;
+  try {
+    const response = await fetch("https://ota-gin.onrender.com/api/v1/cities", {
+      cache: "no-store",
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Error fetching cities:", error);
+    return { data: [], success: false };
+  }
 }
 
 export async function searchHotel(
@@ -36,7 +48,7 @@ export async function searchHotel(
   if (city_id) {
     queryParams.append("city_id", city_id.toString());
   }
-  
+
   if (date) {
     queryParams.append("date", date);
   }

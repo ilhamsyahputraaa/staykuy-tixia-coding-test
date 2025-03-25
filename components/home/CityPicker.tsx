@@ -2,9 +2,8 @@
 
 import * as React from "react";
 import { Check, ChevronsUpDown } from "lucide-react";
-
-import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
+import { Label } from "../ui/label";
 import {
   Command,
   CommandEmpty,
@@ -18,81 +17,66 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { Label } from "../ui/label";
+import { City } from "@/lib/type";
 
-const frameworks = [
-  {
-    value: "next.js",
-    label: "Next.js",
-  },
-  {
-    value: "sveltekit",
-    label: "SvelteKit",
-  },
-  {
-    value: "nuxt.js",
-    label: "Nuxt.js",
-  },
-  {
-    value: "remix",
-    label: "Remix",
-  },
-  {
-    value: "astro",
-    label: "Astro",
-  },
-];
+interface CityPickerCompProps {
+  cities: City[];
+  onCitySelect: (city_id: number) => void; // Tambahkan prop untuk mengirim ID kota ke parent
+}
 
-export function CityPicker() {
+const CityPicker: React.FC<CityPickerCompProps> = ({
+  cities,
+  onCitySelect,
+}) => {
+  const [selectedCity, setSelectedCity] = React.useState<City | null>(null);
   const [open, setOpen] = React.useState(false);
-  const [value, setValue] = React.useState("");
+
+  const handleSelectCity = (city: City) => {
+    setSelectedCity(city);
+    onCitySelect(city.id); // Kirim city_id ke parent
+    setOpen(false);
+  };
 
   return (
     <div>
-        <Label htmlFor="picture">Pilih Kota/Nama Hotel/Destinasi</Label>
-    <Popover open={open} onOpenChange={setOpen}>
-      <PopoverTrigger asChild>
-        <Button
-          variant="outline"
-          role="combobox"
-          aria-expanded={open}
-          className="w-[200px] justify-between"
-        >
-          {value
-            ? frameworks.find((framework) => framework.value === value)?.label
-            : "Pilih Nama Kota..."}
-          <ChevronsUpDown className="opacity-50" />
-        </Button>
-      </PopoverTrigger>
-      <PopoverContent className="w-[200px] p-0">
-        <Command>
-          <CommandInput placeholder="Search framework..." className="h-9" />
-          <CommandList>
-            <CommandEmpty>No framework found.</CommandEmpty>
-            <CommandGroup>
-              {frameworks.map((framework) => (
-                <CommandItem
-                  key={framework.value}
-                  value={framework.value}
-                  onSelect={(currentValue) => {
-                    setValue(currentValue === value ? "" : currentValue);
-                    setOpen(false);
-                  }}
-                >
-                  {framework.label}
-                  <Check
-                    className={cn(
-                      "ml-auto",
-                      value === framework.value ? "opacity-100" : "opacity-0"
-                    )}
-                  />
-                </CommandItem>
-              ))}
-            </CommandGroup>
-          </CommandList>
-        </Command>
-      </PopoverContent>
-    </Popover>
+      <Label htmlFor="city">Pilih Kota/Nama Hotel/Destinasi</Label>
+
+      <Popover open={open} onOpenChange={setOpen}>
+        <PopoverTrigger asChild>
+          <Button variant="outline" className="w-[200px] justify-between">
+            {selectedCity ? selectedCity.name : "Pilih Nama Kota..."}
+            <ChevronsUpDown className="opacity-50" />
+          </Button>
+        </PopoverTrigger>
+        <PopoverContent className="w-[200px] p-0">
+          <Command>
+            <CommandInput placeholder="Cari kota..." className="h-9" />
+            <CommandList>
+              <CommandEmpty>Tidak ditemukan</CommandEmpty>
+              <CommandGroup>
+                {cities.map((city) => (
+                  <CommandItem
+                    key={city.id}
+                    value={city.name}
+                    onSelect={() => handleSelectCity(city)}
+                  >
+                    {city.name}
+                    <Check
+                      className={`ml-auto ${
+                        selectedCity?.id === city.id
+                          ? "opacity-100"
+                          : "opacity-0"
+                      }`}
+                    />
+                  </CommandItem>
+                ))}
+              </CommandGroup>
+            </CommandList>
+          </Command>
+        </PopoverContent>
+      </Popover>
     </div>
   );
-}
+};
+
+export default CityPicker;
