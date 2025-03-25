@@ -1,27 +1,32 @@
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(req: NextRequest) {
-  const url = new URL(req.url);
-  const searchParams = new URLSearchParams(url.search);
+  try {
+    const url = new URL(req.url);
+    const searchParams = new URLSearchParams(url.search);
 
-  // Panggil API eksternal dengan parameter yang diterima
-  const response = await fetch(
-    `https://ota-gin.onrender.com/api/v1/?${searchParams}`,
-    {
-      headers: {
-        "Content-Type": "application/json",
-      },
-      cache: "no-store", // Agar selalu fresh, bisa diubah jadi "force-cache" jika perlu caching
+    // Panggil API eksternal
+    const response = await fetch(
+      `https://ota-gin.onrender.com/api/v1/hotels/search?${searchParams}`,
+      {
+        headers: { "Content-Type": "application/json" },
+      }
+    );
+
+    if (!response.ok) {
+      return NextResponse.json(
+        { error: "Failed to fetch hotels" },
+        { status: response.status }
+      );
     }
-  );
 
-  if (!response.ok) {
+    const data = await response.json();
+    return NextResponse.json(data);
+  } catch (error) {
+    console.error("Error fetching hotels API:", error);
     return NextResponse.json(
-      { error: "Failed to fetch data" },
-      { status: response.status }
+      { error: "Internal Server Error" },
+      { status: 500 }
     );
   }
-
-  const data = await response.json();
-  return NextResponse.json(data);
 }

@@ -121,7 +121,7 @@ const SearchComp = () => {
               disabled={selectedDated === null}
             >
               <Link
-                href={`/search-result?kamar=${inputValueKamar}&kamar=${inputValueTamu}&city_id=${selectedCityId}&date=${selectedDated}`}
+                href={`/search-result?rooms_count=${inputValueKamar}&adult_guests=${inputValueTamu}&city_id=${selectedCityId}&date=${selectedDated}`}
               >
                 Cari Hotel
               </Link>

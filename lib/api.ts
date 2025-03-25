@@ -81,3 +81,24 @@ export async function searchHotel(
   const data = await response.json();
   return data;
 }
+
+
+export async function searchHotelFix(searchParam: URLSearchParams) {
+  const url = `https://ota-gin.onrender.com/api/v1/hotels?${searchParam.toString()}`;
+
+  try {
+    const response = await fetch(url, {
+      headers: { "Content-Type": "application/json" },
+      cache: "no-store", // Pastikan selalu fetch terbaru
+    });
+
+    if (!response.ok) {
+      throw new Error(`Failed to fetch hotels: ${response.statusText}`);
+    }
+
+    return await response.json(); // Kembalikan langsung data JSON
+  } catch (error) {
+    console.error("Error fetching hotels:", error);
+    throw error; // Lempar error agar bisa ditangani di `SearchResult`
+  }
+}

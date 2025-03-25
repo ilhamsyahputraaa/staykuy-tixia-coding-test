@@ -9,15 +9,18 @@ interface SearchResultsMapProps {
 export default function SearchResultsMap({ hotels }: SearchResultsMapProps) {
   return (
     <div>
-      <div className="text-neutral-800 text-xl flex items-center justify-start">
+      <div className="text-neutral-800 text-xl flex items-end mb-5 justify-start">
         Hasil Pencarian{" "}
-        <span className="text-sm text-gray-500">({hotels.length} Results)</span>
+        <span className="text-sm text-gray-300 ms-2">{hotels.length} Results</span>
       </div>
 
       {hotels.length > 0 ? (
-        <div>
+        <div className="flex flex-col gap-5">
           {hotels.map((hotel) => (
             <HotelItem
+            address={hotel.address}
+            star={hotel.star}
+            price={hotel.rooms[0].price}
               key={hotel.id}
               title={hotel.name}
               description={hotel.description}

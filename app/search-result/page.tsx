@@ -8,44 +8,60 @@ interface SearchResultsProps {
   searchParams: Record<string, string | string[] | undefined>;
 }
 
+// Fungsi untuk fetch data dari /api/hotels
+async function getHotels(
+  searchParams: Record<string, string | string[] | undefined>
+) {
+  // Konversi `searchParams` ke string query
+  const queryParams = new URLSearchParams();
+
+  Object.entries(searchParams).forEach(([key, value]) => {
+    if (value) queryParams.append(key, decodeURIComponent(value as string));
+  });
+
+  console.log("searchParams:", searchParams);
+  console.log("queryParams:", queryParams.toString()); // Debugging
+
+  try {
+    const res = await fetch(`http://localhost:3000/api/hotels?${queryParams}`, {
+      cache: "no-store", // Agar tidak cache lama
+    });
+
+    if (!res.ok) {
+      throw new Error(`Failed to fetch hotels: ${res.statusText}`);
+    }
+
+    const data: HotelSearchResponse = await res.json();
+    return data.data?.data || []; // Jika `data.data` undefined, kembalikan array kosong
+  } catch (error) {
+    console.error("Error fetching hotels:", error);
+    return [];
+  }
+}
+
+
+interface SearchResultsProps {
+  searchParams: Record<string, string | string[] | undefined>;
+}
+
 export default async function SearchResult({
   searchParams,
 }: SearchResultsProps) {
-  try {
-    const queryParams = new URLSearchParams();
+  const hotels = await getHotels(searchParams); // Fetch data hotel
 
-    Object.entries(searchParams).forEach(([key, value]) => {
-      if (value) queryParams.append(key, value as string);
-    });
+  console.log("Final Hotels Data:", hotels); // Debugging
 
-    // Fetch data dari proxy API Next.js
-    const response = await fetch(
-      `${process.env.NEXT_PUBLIC_BASE_URL}/api/hotels?${queryParams}`,
-      { cache: "no-store" }
-    );
-
-    if (!response.ok) {
-      throw new Error("Failed to fetch hotels");
-    }
-
-    const res: HotelSearchResponse = await response.json();
-    const hotels = res.data?.data || []; // Pastikan `hotels` tidak undefined
-
-    return (
-      <div className="px-[120px] py-[64px]">
-        <SearchComp />
-        <div className="flex gap-5 mt-5">
-          <div className="border rounded-xl w-1/3 shadow-xl h-screen">
-            <LeftSideBar />
-          </div>
-          <div className="border rounded-xl w-2/3 shadow-xl h-screen">
-            <SearchResultsMap hotels={hotels} />
-          </div>
+  return (
+    <div className="px-[120px] py-[64px]">
+      <SearchComp />
+      <div className="flex gap-5 mt-5">
+        <div className="border rounded-xl w-1/3 shadow-xl h-fit">
+          <LeftSideBar />
+        </div>
+        <div className=" rounded-xl w-2/3 ">
+          <SearchResultsMap hotels={hotels} />
         </div>
       </div>
-    );
-  } catch (error) {
-    console.error("Error fetching hotels:", error);
-    return <p>Error fetching hotels</p>;
-  }
+    </div>
+  );
 }
