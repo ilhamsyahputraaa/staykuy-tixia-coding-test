@@ -86,11 +86,12 @@ export default async function DetailPage({
         <div className="w-1/2 flex-wrap  flex">
           {hotelData.images.slice(1, 5).map((image, index) => (
             <Image
-              src={hotelData.images[0]}
-              alt={hotelData.name}
+              src={image}
+              alt={image}
               width={1000}
               height={1000}
               className="rounded-2xl w-1/2 px-2 pb-2"
+              key={hotelData.id}
             />
           ))}
         </div>
@@ -127,7 +128,7 @@ export default async function DetailPage({
 
         <div className="flex flex-col gap-2">
           {hotelData.rooms.map((v) => (
-            <div className="flex shadow-xl my-2 rounded-xl border">
+            <div className="flex shadow-xl my-2 rounded-xl border" key={v.id}>
               <div className="w-[300px]  flex overflow-hiden">
                 <Image
                   width={1000}
@@ -142,7 +143,7 @@ export default async function DetailPage({
                 <div className="flex"></div>
                 <div className="flex-wrap flex gap-2">
                   {v.facilities.slice(0, 3).map((v) => (
-                    <div className="bg-blue-100 rounded-full text-xs py-0 px-2 flex items-center justify-center">
+                    <div key={v} className="bg-blue-100 rounded-full text-xs py-0 px-2 flex items-center justify-center">
                       {v}
                     </div>
                   ))}

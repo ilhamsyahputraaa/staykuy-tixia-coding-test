@@ -7,3 +7,4 @@ Please ignore all the update after the deadline time ( Tuesday, March 25th 2025 
 Update March 26th 2025
 - uncomment navigationbar component
 - fixing change city and date
+- adding key prop to every map items on detail page
