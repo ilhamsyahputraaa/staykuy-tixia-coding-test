@@ -123,11 +123,11 @@ const SearchComp = () => {
               className={`disabled:opacity-50 bg-blue-500 text-white rounded-2xl h-fit px-4 py-2`}
               disabled={selectedDated === null}
             >
-              <Link
+              <a
                 href={`/search-result?rooms_count=${inputValueKamar}&adult_guests=${inputValueTamu}&city_id=${selectedCityId}&date=${selectedDated}`}
               >
                 Cari Hotel
-              </Link>
+              </a>
             </button>
           </div>
         </>

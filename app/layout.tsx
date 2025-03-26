@@ -34,11 +34,11 @@ export default async function RootLayout({
   const cities: City[] = res.data;
   return (
     <html lang="en">
-      {/* <NavigationBar /> */}
 
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
         >
+      <NavigationBar />
       <CityProvider  cities={cities}>
         {children}
         </CityProvider>
